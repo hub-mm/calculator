@@ -1,1 +1,4 @@
-/** CSS **/
+* {
+    background-color: black;
+    color: white;
+}
