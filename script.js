@@ -5,4 +5,10 @@ function add() {
     result = input.reduce((first, last) => first + last)
 }
 add(input);
-console.log(result)
+console.log(result);
+
+function subtract() {
+    result = input.reduce((first, last) => first - last)
+}
+subtract(input);
+console.log(result);
