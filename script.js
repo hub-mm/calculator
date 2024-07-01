@@ -18,3 +18,9 @@ function muliply() {
 }
 muliply(input);
 console.log(result);
+
+function divide() {
+    result = input.reduce((first, last) => first / last)
+}
+divide(input);
+console.log(result);
