@@ -12,3 +12,9 @@ function subtract() {
 }
 subtract(input);
 console.log(result);
+
+function muliply() {
+    result = input.reduce((first, last) => first * last)
+}
+muliply(input);
+console.log(result);
