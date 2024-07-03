@@ -1,51 +1,36 @@
 const numbers = document.querySelectorAll('.number');
-console.log(numbers)
-const operators = document.querySelectorAll('.operator')
-console.log(operators)
+console.log(numbers);
 
-const display = document.querySelector('.display');
+let inputOne = '20';
+let inputTwo = '10';
+let results;
 
-let inputOne = '';
-let inputTwo = '';
-let input = [inputOne, inputTwo];
-let result;
-const operator = [add, subtract, muliply, divide];
 
 function add() {
-    result = input.reduce((first, last) => first + last)
+    results = parseFloat(inputOne) + parseFloat(inputTwo);
+    return results;
 }
 
 function subtract() {
-    result = input.reduce((first, last) => first - last)
+    results = parseFloat(inputOne) - parseFloat(inputTwo);
+    return results;
 }
 
-function muliply() {
-    result = input.reduce((first, last) => first * last)
+function multiply() {
+    results = parseFloat(inputOne) * parseFloat(inputTwo);
+    return results;
 }
 
 function divide() {
-    result = input.reduce((first, last) => first / last)
+    results = parseFloat(inputOne) / parseFloat(inputTwo);
+    return results;
 }
 
-add(input);
-subtract(input);
-muliply(input);
-divide(input);
-
-function opertate() {
-    display.textContent = inputOne;
-    display.textContent = inputTwo;
-    display.textContent = result;
-}
-
-numbers.forEach(num => {
-    num.addEventListener('click', updateDisplay);
-});
-
-function updateDisplay(num) {
-    let displayText = display.textContent;
-    for (let i = 0; i < numbers.length; i++) {
-        let numberText = numbers[i].innerText;
-        console.log([numberText])
-    }
-}
+operatorAdd = add();
+console.log('Add:', operatorAdd)
+operatorSubtract = subtract();
+console.log('Subtract:', operatorSubtract);
+operatorMultiply = multiply();
+console.log('Multiply:', operatorMultiply);
+operatorDivide = divide();
+console.log('Divide:', operatorDivide);
