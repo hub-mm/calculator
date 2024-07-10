@@ -47,25 +47,52 @@ operators.forEach(op => {
 
 function getInputOne(e) {
     if (!operator) {
-    inputOne = e.target.innerText;
-    display.textContent += inputOne;
-    console.log(e.target.innerText);
+        inputOne = e.target.innerText;
+        display.textContent += inputOne;
     }
+    console.log(inputOne);
+    return inputOne;
 }
 
 function getOperator(e) {
     operator = e.target.innerText;
     display.textContent = '';
-    console.log(e.target.innerText)
+    console.log(operator)
+    return operator;
 }
 
 function getInputTwo(e) {
     if (operator) {
-    inputTwo = e.target.innerText;
-    display.textContent += inputTwo
+        inputTwo = e.target.innerText;
+        display.textContent += inputTwo;
     }
+    console.log(inputTwo)
+    return inputTwo;
 }
 
 function operate() {
-    
+    let operateVal;
+    if (inputOne) {
+        if (operator === '+') {
+            operateVal = operatorAdd;
+        } else if (operator === '-') {
+            operateVal = operatorSubtract;
+        } else if (operator === 'X') {
+            operateVal = operatorMultiply;
+        } else if (operator === '/') {
+            operateVal = operatorDivide;
+        } else if (operator === '=') {
+            operateVal = '=';
+            display.textContent = results;
+        }
+    } else {
+        operateVal = null;
+    }
+    return operateVal
 }
+operate(operator);
+
+// function getResult() {
+
+// }
+// getResult();
