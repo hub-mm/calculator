@@ -1,5 +1,6 @@
 const numbers = document.querySelectorAll('.number');
 const operators = document.querySelectorAll('.operator');
+const actionBtn = document.querySelectorAll('.action');
 const displaySum = document.querySelector('.display-sum');
 const displayLive = document.querySelector('.display-live');
 
@@ -10,22 +11,18 @@ let operatorEqual = '';
 let operatorFunc = '';
 let arrInput = [];
 let arrOp = [];
-let cal = '';
+let sum = '';
 let liveSum = ''
 let results = '';
+let eventAction = '';
 
 numbers.forEach(num => {
     num.addEventListener('click', (e) => {
         inputOne = getInputOne(num, e);
         inputTwo = getInputTwo(num, e);
         arrInput = getArrayNum(inputOne, inputTwo);
-        cal = getCal(arrInput, e);
+        sum = getCal(arrInput, e);
         liveSum = getLiveSum(inputOne, inputTwo);
-        console.log('inputOne: ', inputOne);
-        console.log('inputTwo: ', inputTwo);
-        console.log('arrInput: ', arrInput)
-        console.log('cal: ', cal);
-        console.log('liveSum: ', liveSum.textContent);
     })
 });
 
@@ -36,14 +33,15 @@ operators.forEach(opSelect => {
         operatorEqual = getOperatorEqual(opSelect, event);
         arrOp = getArrayOp(operator, operatorEqual);
         results = getResult(opSelect, event);
-        cal = getCal(arrOp, event);
+        sum = getCal(arrOp, event);
         liveSum = getLiveSum(results, event);
-        console.log('operator: ', operator)
-        console.log('operatorFunc: ', operatorFunc);
-        console.log('arrOP: ', arrOp);
-        console.log('results: ', results);
-        console.log('cal: ', cal);
-        console.log('liveSum: ', liveSum.textContent);
+    })
+});
+
+actionBtn.forEach(action => {
+    action.addEventListener('click', (eAction) => {
+        eventAction = allClear(eAction);
+        console.log(eAction.target.innerText)
     })
 });
 
@@ -70,7 +68,7 @@ function divide(arrInput) {
 }
 
 function getInputOne(num, e) {
-    if (!operator) {
+    if (!operator || ! operator && eventAction !== '') {
         inputOne += e.target.innerText;
     }
     return inputOne
@@ -84,7 +82,7 @@ function getOperator(opSelect, event) {
 }
 
 function getInputTwo(num, e) {
-    if (operator !== '') {
+    if (operator !== '' && operator !== '='|| operator !== '' && eventAction !== '') {
         inputTwo += e.target.innerText;
     }
     return inputTwo
@@ -98,7 +96,7 @@ function getOperatorEqual(opSelect, event) {
 }
 
 function getArrayNum(inputOne, inputTwo) {
-    if (inputOne !== '') {
+    if (inputOne !== '' || eventAction !== '') {
         arrInput = [parseFloat(inputOne), parseFloat(inputTwo)];
     }
     return arrInput
@@ -146,15 +144,28 @@ function getLiveSum(event) {
 }
 
 function getCal(e, event) {
-    cal = displaySum;
+    sum = displaySum;
     if (!operator) {
-        cal.textContent = inputOne;
+        sum.textContent = inputOne;
     } else if (operator !== '' && inputTwo === '') {
-        cal.textContent = `${arrInput[0]} ${arrOp[0]}`;
+        sum.textContent = `${arrInput[0]} ${arrOp[0]}`;
     } else if (inputTwo !== '' && results === '') {
-        cal.textContent = `${arrInput[0]} ${arrOp[0]} ${arrInput[1]}`;
+        sum.textContent = `${arrInput[0]} ${arrOp[0]} ${arrInput[1]}`;
     } else if (results !== '') {
-        cal.textContent = `${arrInput[0]} ${arrOp[0]} ${arrInput[1]} ${arrOp[1]} ${results}`;
+        sum.textContent = `${arrInput[0]} ${arrOp[0]} ${arrInput[1]} ${arrOp[1]} ${results}`;
     }
-    return cal
+    return sum
+}
+
+function allClear(eAction) {
+    if (eAction.target.innerText === 'AC') {
+        inputOne = '';
+        operator = '';
+        inputTwo = '';
+        arrInput = [inputOne, inputTwo];
+        arrOp = [operator, operatorEqual];
+        results = '';
+        liveSum.textContent = '';
+        sum.textContent = '';
+    }
 }
