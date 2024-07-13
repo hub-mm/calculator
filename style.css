@@ -37,6 +37,8 @@
 
     font-size: 20px;
     font-weight: 100;
+
+    color: rgba(211, 211, 211, 0.357);
 }
 
 .display-live {
@@ -66,7 +68,7 @@
 .action,
 .number,
 .operator,
-.zero {
+#zero {
     width: 100px;
     height: 100px;
 
@@ -86,12 +88,12 @@
 }
 
 .number,
-.zero {
+#zero {
     background: dimgray;
     color: white;
 }
 .number:hover,
-.zero:hover {
+#zero:hover {
     background: rgb(148, 148, 148);
 }
 
@@ -103,7 +105,7 @@
     background: rgb(255, 202, 103);
 }
 
-.zero {
+#zero {
     width: 210px;
     height: 100px;
 
