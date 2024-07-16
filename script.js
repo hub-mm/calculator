@@ -13,18 +13,17 @@ let arrInput = [];
 let arrOp = [];
 let sum = '';
 let liveSum = '';
-const arrNewLive = [];
 let results = '';
-let eventAction = '';
+let clearAction = '';
 
 numbers.forEach(num => {
     num.addEventListener('click', (e) => {
+        newCal();
         inputOne = getInputOne(num, e);
         inputTwo = getInputTwo(num, e);
         arrInput = getArrayNum(inputOne, inputTwo);
-        sum = getCal(arrInput, e);
+        sum = getSum(arrInput, e);
         liveSum = getLiveSum(inputOne, inputTwo);
-        operatorHover(inputOne, inputTwo)
     })
 });
 
@@ -35,15 +34,22 @@ operators.forEach(opSelect => {
         operatorEqual = getOperatorEqual(opSelect, event);
         arrOp = getArrayOp(operator, operatorEqual);
         results = getResult(opSelect, event);
-        sum = getCal(arrOp, event);
+        inputOne = getInputOne(results);
+        newCal(results, event);
+        sum = getSum(arrOp, event);
         liveSum = getLiveSum(results, event);
-        operatorHover(event)
-    })
+    });
 });
 
 actionBtn.forEach(action => {
     action.addEventListener('click', (eAction) => {
-        eventAction = allClear(eAction);
+        newCal();
+        inputOne = switchPosNegOne(inputOne, eAction);
+        inputTwo = switchPosNegTwo(inputTwo, eAction);
+        arrInput = getArrayNum(inputOne, inputTwo);
+        sum = getSum(eAction);
+        liveSum = getLiveSum(eAction);
+        clearAction = allClear(eAction);
     })
 });
 
@@ -63,27 +69,43 @@ function divide(arrInput) {
     results = arrInput.reduce((acc, val) => acc /= val);
     return results
 }
-
-function switchPosNeg() {
-
+function switchPosNegOne(inputOne, eAction) {
+    if (inputTwo === '' && eAction.target.innerText === '+/-') {
+        if (inputOne > 0) {
+            inputOne = `-${inputOne}`;
+        }
+    }
+    return inputOne
+}
+function switchPosNegTwo(inputTwo, eAction) {
+    if (inputTwo !== '' && eAction.target.innerText === '+/-') {
+        if (inputTwo > 0) {
+            inputTwo = `-${inputTwo}`;
+        }
+    }
+    return inputTwo
 }
 
 function getInputOne(num, e) {
-    if (!operator || !operator && eventAction !== '') {
+    if (!operator) {
         inputOne += e.target.innerText;
     }
     return inputOne
 }
 
 function getOperator(opSelect, event) {
-    if (inputOne !== '' && inputTwo === '') {
+    if (event.target.innerText === '-') {
+        operator = event.target.innerText;
+    } else if (inputOne !== '' && inputTwo === '' && results === '') {
+        operator = event.target.innerText;
+    } else if (inputOne === results) {
         operator = event.target.innerText;
     }
     return operator
 }
 
 function getInputTwo(num, e) {
-    if (operator !== '' && operator !== '=' || operator !== '' && eventAction !== '') {
+    if (operator !== '' && operator !== '=' && results === '') {
         inputTwo += e.target.innerText;
     }
     return inputTwo
@@ -97,7 +119,7 @@ function getOperatorEqual(opSelect, event) {
 }
 
 function getArrayNum(inputOne, inputTwo) {
-    if (inputOne !== '' || eventAction !== '') {
+    if (inputOne !== '' || clearAction !== '') {
         arrInput = [parseFloat(inputOne), parseFloat(inputTwo)];
     }
     return arrInput
@@ -134,6 +156,15 @@ function getResult(opSelect, event) {
     return results
 }
 
+function newCal(opSelect, event) {
+    if (results && event.target.innerText !== '=') {
+        inputOne = results;
+        inputTwo = '';
+        results = '';
+    }
+    return inputOne
+}
+
 function getLiveSum(event) {
     liveSum = displayLive;
     if (!operator) {
@@ -146,16 +177,16 @@ function getLiveSum(event) {
     return liveSum
 }
 
-function getCal(e, event) {
+function getSum(e, event) {
     sum = displaySum;
-    if (!operator) {
+    if (!results) {
         sum.textContent = parseFloat(inputOne).toLocaleString();
     } else if (operator !== '' && inputTwo === '') {
-        sum.textContent = `${arrInput[0].toLocaleString()} ${arrOp[0].toLocaleString()}`;
+        sum.textContent = `${arrInput[0].toLocaleString()} ${arrOp[0]}`;
     } else if (inputTwo !== '' && results === '') {
-        sum.textContent = `${arrInput[0].toLocaleString()} ${arrOp[0].toLocaleString()} ${arrInput[1].toLocaleString()}`;
-    } else if (results !== '') {
-        sum.textContent = `${arrInput[0].toLocaleString()} ${arrOp[0].toLocaleString()} ${arrInput[1].toLocaleString()} ${arrOp[1].toLocaleString()} ${results.toLocaleString()}`;
+        sum.textContent = `${arrInput[0].toLocaleString()} ${arrOp[0]} ${arrInput[1].toLocaleString()}`;
+    } else if (results !== '' && event.target.textContent === '=') {
+        sum.textContent = `${arrInput[0].toLocaleString()} ${arrOp[0]} ${arrInput[1].toLocaleString()} ${arrOp[1]} ${results.toLocaleString()}`;
     }
     return sum
 }
@@ -173,21 +204,4 @@ function allClear(eAction) {
     }
 }
 
-function operatorHover(event) {
-    const operators = document.querySelectorAll('.operator');
-
-    if (inputOne !== '' && operator !== '' && inputTwo !== '') {
-        operators.forEach(op => {
-            op.style.background = 'orange';
-            op.addEventListener('mouseover', () => {
-                op.style.background = 'rgb(255, 202, 103)';
-            })
-            op.addEventListener('mouseout', () => {
-                op.style.background = 'orange';
-            })
-        });
-    } else if (inputOne !== '' && operator !== '' && inputTwo === '' || inputOne !== '' && operator !== '' && inputTwo === '' && eventAction !== '') {
-        event.target.style.background = 'rgb(255, 202, 103)';
-    }
-
-}
+// problem with getting input one to update straight away. could be due to order.
