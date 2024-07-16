@@ -18,7 +18,7 @@ let clearAction = '';
 
 numbers.forEach(num => {
     num.addEventListener('click', (e) => {
-        newCal();
+        newCal(e);
         inputOne = getInputOne(num, e);
         inputTwo = getInputTwo(num, e);
         arrInput = getArrayNum(inputOne, inputTwo);
@@ -29,13 +29,13 @@ numbers.forEach(num => {
 
 operators.forEach(opSelect => {
     opSelect.addEventListener('click', (event) => {
+        newCal(results, event);
         operator = getOperator(opSelect, event);
         operatorFunc = getOperatorFunc(operator, event);
         operatorEqual = getOperatorEqual(opSelect, event);
         arrOp = getArrayOp(operator, operatorEqual);
         results = getResult(opSelect, event);
         inputOne = getInputOne(results);
-        newCal(results, event);
         sum = getSum(arrOp, event);
         liveSum = getLiveSum(results, event);
     });
@@ -43,7 +43,7 @@ operators.forEach(opSelect => {
 
 actionBtn.forEach(action => {
     action.addEventListener('click', (eAction) => {
-        newCal();
+        newCal(eAction);
         inputOne = switchPosNegOne(inputOne, eAction);
         inputTwo = switchPosNegTwo(inputTwo, eAction);
         arrInput = getArrayNum(inputOne, inputTwo);
@@ -157,8 +157,9 @@ function getResult(opSelect, event) {
 }
 
 function newCal(opSelect, event) {
-    if (results && event.target.innerText !== '=') {
+    if (results && opSelect !== '=') {
         inputOne = results;
+        operator = operator;
         inputTwo = '';
         results = '';
     }
@@ -179,8 +180,8 @@ function getLiveSum(event) {
 
 function getSum(e, event) {
     sum = displaySum;
-    if (!results) {
-        sum.textContent = parseFloat(inputOne).toLocaleString();
+    if (!operator && !results || arrInput[0] !== '' && arrOp[1] !== '=' && arrInput[1] !== '' && results !== '') {
+        sum.textContent = `${arrInput[0].toLocaleString()}`;
     } else if (operator !== '' && inputTwo === '') {
         sum.textContent = `${arrInput[0].toLocaleString()} ${arrOp[0]}`;
     } else if (inputTwo !== '' && results === '') {
@@ -204,4 +205,4 @@ function allClear(eAction) {
     }
 }
 
-// problem with getting input one to update straight away. could be due to order.
+// relook at sum, one step behind with showing calculation.
