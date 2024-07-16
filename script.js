@@ -174,7 +174,7 @@ function allClear(eAction) {
 }
 
 function operatorHover(event) {
-const operators = document.querySelectorAll('.operator');
+    const operators = document.querySelectorAll('.operator');
 
     if (inputOne !== '' && operator !== '' && inputTwo !== '') {
         operators.forEach(op => {
@@ -186,6 +186,8 @@ const operators = document.querySelectorAll('.operator');
                 op.style.background = 'orange';
             })
         });
-    } else if (inputOne !== '' && operator !== '' && inputTwo === '')
+    } else if (inputOne !== '' && operator !== '' && inputTwo === '' || inputOne !== '' && operator !== '' && inputTwo === '' && eventAction !== '') {
         event.target.style.background = 'rgb(255, 202, 103)';
+    }
+
 }
