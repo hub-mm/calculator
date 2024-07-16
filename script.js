@@ -12,7 +12,8 @@ let operatorFunc = '';
 let arrInput = [];
 let arrOp = [];
 let sum = '';
-let liveSum = ''
+let liveSum = '';
+const arrNewLive = [];
 let results = '';
 let eventAction = '';
 
@@ -23,6 +24,7 @@ numbers.forEach(num => {
         arrInput = getArrayNum(inputOne, inputTwo);
         sum = getCal(arrInput, e);
         liveSum = getLiveSum(inputOne, inputTwo);
+        operatorHover(inputOne, inputTwo)
     })
 });
 
@@ -35,13 +37,13 @@ operators.forEach(opSelect => {
         results = getResult(opSelect, event);
         sum = getCal(arrOp, event);
         liveSum = getLiveSum(results, event);
+        operatorHover(event)
     })
 });
 
 actionBtn.forEach(action => {
     action.addEventListener('click', (eAction) => {
         eventAction = allClear(eAction);
-        console.log(eAction.target.innerText)
     })
 });
 
@@ -58,17 +60,16 @@ function multiply(arrInput) {
     return results
 }
 function divide(arrInput) {
-    if (inputTwo !== 0) {
-        results = arrInput.reduce((acc, val) => acc /= val);
-    } else if (inputTwo === 0) {
-        return 'ERROR'
-    }
+    results = arrInput.reduce((acc, val) => acc /= val);
     return results
+}
+
+function switchPosNeg() {
 
 }
 
 function getInputOne(num, e) {
-    if (!operator || ! operator && eventAction !== '') {
+    if (!operator || !operator && eventAction !== '') {
         inputOne += e.target.innerText;
     }
     return inputOne
@@ -82,7 +83,7 @@ function getOperator(opSelect, event) {
 }
 
 function getInputTwo(num, e) {
-    if (operator !== '' && operator !== '='|| operator !== '' && eventAction !== '') {
+    if (operator !== '' && operator !== '=' || operator !== '' && eventAction !== '') {
         inputTwo += e.target.innerText;
     }
     return inputTwo
@@ -117,6 +118,8 @@ function getOperatorFunc(operator) {
             operatorFunc = subtract(arrInput);
         } else if (operator === 'X') {
             operatorFunc = multiply(arrInput);
+        } else if (operator === '/' && arrInput[1] === 0) {
+            operatorFunc = 'ERROR';
         } else if (operator === '/') {
             operatorFunc = divide(arrInput);
         }
@@ -134,11 +137,11 @@ function getResult(opSelect, event) {
 function getLiveSum(event) {
     liveSum = displayLive;
     if (!operator) {
-        liveSum.textContent = inputOne;
+        liveSum.textContent = parseFloat(inputOne).toLocaleString();
     } else if (inputTwo !== '' && results === '') {
-        liveSum.textContent = inputTwo;
+        liveSum.textContent = parseFloat(inputTwo).toLocaleString();
     } else if (results !== '') {
-        liveSum.textContent = results;
+        liveSum.textContent = results.toLocaleString();
     }
     return liveSum
 }
@@ -146,13 +149,13 @@ function getLiveSum(event) {
 function getCal(e, event) {
     sum = displaySum;
     if (!operator) {
-        sum.textContent = inputOne;
+        sum.textContent = parseFloat(inputOne).toLocaleString();
     } else if (operator !== '' && inputTwo === '') {
-        sum.textContent = `${arrInput[0]} ${arrOp[0]}`;
+        sum.textContent = `${arrInput[0].toLocaleString()} ${arrOp[0].toLocaleString()}`;
     } else if (inputTwo !== '' && results === '') {
-        sum.textContent = `${arrInput[0]} ${arrOp[0]} ${arrInput[1]}`;
+        sum.textContent = `${arrInput[0].toLocaleString()} ${arrOp[0].toLocaleString()} ${arrInput[1].toLocaleString()}`;
     } else if (results !== '') {
-        sum.textContent = `${arrInput[0]} ${arrOp[0]} ${arrInput[1]} ${arrOp[1]} ${results}`;
+        sum.textContent = `${arrInput[0].toLocaleString()} ${arrOp[0].toLocaleString()} ${arrInput[1].toLocaleString()} ${arrOp[1].toLocaleString()} ${results.toLocaleString()}`;
     }
     return sum
 }
@@ -168,4 +171,21 @@ function allClear(eAction) {
         liveSum.textContent = '';
         sum.textContent = '';
     }
+}
+
+function operatorHover(event) {
+const operators = document.querySelectorAll('.operator');
+
+    if (inputOne !== '' && operator !== '' && inputTwo !== '') {
+        operators.forEach(op => {
+            op.style.background = 'orange';
+            op.addEventListener('mouseover', () => {
+                op.style.background = 'rgb(255, 202, 103)';
+            })
+            op.addEventListener('mouseout', () => {
+                op.style.background = 'orange';
+            })
+        });
+    } else if (inputOne !== '' && operator !== '' && inputTwo === '')
+        event.target.style.background = 'rgb(255, 202, 103)';
 }
